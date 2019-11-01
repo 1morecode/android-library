@@ -1,0 +1,34 @@
+// Calling
+  shareGreeting();
+
+
+/*-- share screenshot on whatsapp ---*/
+    private void shareGreeting() {
+        try {
+            Bitmap bitmap = saveScreenshot(); // screenshot or image
+            String pathofBmp = MediaStore.Images.Media.insertImage(getContentResolver(),
+                    bitmap, "title", null);
+            Uri uri = Uri.parse(pathofBmp);
+            Intent shareIntent = new Intent(Intent.ACTION_SEND);
+            shareIntent.setType("*/*");
+            String shareMsg = "\nhttps://perfectsoft.org.in\n\n";
+            shareIntent.putExtra(Intent.EXTRA_TEXT, shareMsg);
+            shareIntent.putExtra(Intent.EXTRA_STREAM, uri);
+            startActivity(Intent.createChooser(shareIntent, "Share via"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    //  Taking  Screenshot
+    public Bitmap saveScreenshot() {
+        Bitmap bitmap = null;
+        try {
+            View v1 = screenshotImage; //Layout to take screenshot
+            v1.setDrawingCacheEnabled(true);
+            bitmap = Bitmap.createBitmap(v1.getDrawingCache());
+        } catch (Exception e) {
+            Toast.makeText(ImageShareActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+        return bitmap;
+    }
