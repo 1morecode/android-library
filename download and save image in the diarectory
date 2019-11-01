@@ -1,8 +1,24 @@
 
 //  Calling
-  downloadGreeting();
+  File dir;
 
+                downloadGreeting();
+  
+  // Notification
+                NotificationCompat.Builder builder =
+                        new NotificationCompat.Builder(ImageShareActivity.this)
+                                .setSmallIcon(R.drawable.trans_logo)
+                                .setContentTitle("Saved Successfully")
+                                .setContentText("Click to open saved file location.")
+                                .setVisibility(NotificationCompat.VISIBILITY_PUBLIC);
+                builder.setChannelId("1");
+                createNotificationChannel();
 
+                // Add as notification
+                NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                manager.notify(0, builder.build());
+  
+  
 
 //    Download Screenshot of Greeting
     private void downloadGreeting() {
@@ -16,7 +32,7 @@
                     Toast.makeText(ImageShareActivity.this, "Failed to create Dir", Toast.LENGTH_SHORT).show();
                     return;
                 }
-            Bitmap bitmap = saveScreenshot(); // image in bitmap
+            Bitmap bitmap = saveScreenshot(); // image or screenshot in bitmap
             dir = new File(dir.getPath() + "/"+image+".jpg");
             FileOutputStream stream = new FileOutputStream(dir);
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
@@ -25,4 +41,18 @@
         } catch (Exception e) {
             Toast.makeText(ImageShareActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
         }
+    }
+    
+    
+    //  Taking  Screenshot
+    public Bitmap saveScreenshot() {
+        Bitmap bitmap = null;
+        try {
+            View v1 = screenshotImage; //Layout to take screenshot
+            v1.setDrawingCacheEnabled(true);
+            bitmap = Bitmap.createBitmap(v1.getDrawingCache());
+        } catch (Exception e) {
+            Toast.makeText(ImageShareActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+        return bitmap;
     }
