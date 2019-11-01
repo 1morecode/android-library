@@ -1,0 +1,28 @@
+
+//  Calling
+  downloadGreeting();
+
+
+
+//    Download Screenshot of Greeting
+    private void downloadGreeting() {
+        try {
+            String path = Environment.getExternalStorageDirectory() + "/PerfectGyan";
+            /* Make Directory */
+            dir = new File(path);
+            Log.d("Path of Directory", path);
+            if (!dir.isDirectory())
+                if (!dir.mkdir()) {
+                    Toast.makeText(ImageShareActivity.this, "Failed to create Dir", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+            Bitmap bitmap = saveScreenshot(); // image in bitmap
+            dir = new File(dir.getPath() + "/"+image+".jpg");
+            FileOutputStream stream = new FileOutputStream(dir);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+            stream.flush();
+            stream.close();
+        } catch (Exception e) {
+            Toast.makeText(ImageShareActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    }
